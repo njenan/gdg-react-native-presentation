@@ -1,23 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import styles from './style';
+import {Platform, Button, Text, View} from 'react-native';
+
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
-  }
-}
+    render() {
+        let platformSpecificText = Platform.select({
+            ios: "Go to App Store",
+            android: "Go to Play Store"
+        });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+        return (
+            <View style={styles.container}>
+                <Text>Hello {Platform.OS} users!</Text>
+                <Button title={platformSpecificText} onPress={function(){}}>Asdf</Button>
+            </View>
+        );
+    }
+}
