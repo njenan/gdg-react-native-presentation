@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from './style';
-import {Animated, Platform, Button, Text, View} from 'react-native';
+import {Animated, Platform, Button, Text, Image, View} from 'react-native';
 
 
 export default class App extends React.Component {
     state = {
         fade: new Animated.Value(0),
-        left: new Animated.Value(-200)
+        left: new Animated.Value(-200),
+        spin: new Animated.Value(0)
     };
 
     render() {
@@ -17,6 +18,11 @@ export default class App extends React.Component {
 
         let fade = this.state.fade;
         let left = this.state.left;
+
+        let spin = this.state.spin.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0deg', '360deg']
+        });
 
         return (
             <View style={styles.container}>
@@ -30,6 +36,7 @@ export default class App extends React.Component {
                 <Animated.View style={{marginLeft: left}}>
                     <Text>Bouncing</Text>
                 </Animated.View>
+                <Animated.Image style={{transform: [{rotate: spin}]}} source={require("./smiley.jpg")}/>
             </View>
         );
     }
@@ -43,6 +50,7 @@ export default class App extends React.Component {
             .start();
 
         let left = this.state.left;
+
         function bounceLeft() {
             Animated.spring(
                 left,
@@ -51,7 +59,7 @@ export default class App extends React.Component {
                 })
                 .start(bounceRight);
         }
-        
+
         function bounceRight() {
             Animated.spring(
                 left,
@@ -60,7 +68,27 @@ export default class App extends React.Component {
                 })
                 .start(bounceLeft);
         }
-        
+
         bounceLeft();
+
+        let spin = this.state.spin;
+
+        function spinner() {
+            Animated.sequence([
+                Animated.timing(
+                    spin,
+                    {
+                        toValue: 1
+                    }),
+                Animated.timing(
+                    spin,
+                    {
+                        toValue: 0
+                    })
+            ])
+                .start(spinner);
+        }
+
+        spinner();
     }
 }
